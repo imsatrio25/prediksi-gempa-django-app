@@ -1,0 +1,1 @@
+web: gunicorn gempaweb.wsgi --log-file -

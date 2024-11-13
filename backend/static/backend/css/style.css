@@ -1,0 +1,129 @@
+/* General Body Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin: 20px 0;
+    color: #2d3e50;
+}
+
+/* Container to center content */
+.container {
+    width: 95%; /* Wider container */
+    max-width: 1000px; /* Increased max-width */
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Form Styles */
+.form-container {
+    background-color: #ffffff;
+    padding: 30px; /* Increased padding */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.input-group {
+    margin-bottom: 20px; /* Increased margin for better spacing */
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #2d3e50;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    width: 100%;
+    padding: 12px; /* Increased padding for larger inputs */
+    margin-bottom: 20px; /* Increased margin */
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1.1rem; /* Slightly larger font */
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus {
+    border-color: #4a90e2;
+    outline: none;
+}
+
+button {
+    display: inline-block;
+    padding: 12px 24px; /* Increased button size */
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    margin-top: 15px; /* Increased top margin */
+}
+
+button:hover {
+    background-color: #357abd;
+}
+
+button:disabled {
+    background-color: #b0c4de;
+    cursor: not-allowed;
+}
+
+/* File Upload Section */
+.file-upload {
+    margin-top: 30px; /* Increased margin */
+}
+
+h3 {
+    font-size: 1.5rem; /* Larger font size */
+    color: #2d3e50;
+}
+
+input[type="file"] {
+    margin: 20px 0; /* Increased margin */
+}
+
+/* Prediction Results Section */
+.results {
+    margin-top: 30px; /* Increased margin */
+    font-size: 1.3rem; /* Slightly larger font */
+    color: #2d3e50;
+}
+
+/* Map Styles */
+.map-container {
+    margin-top: 40px; /* Increased margin */
+    width: 100%; /* Make it full width */
+    display: flex;
+    justify-content: center; /* Center the map */
+}
+
+#map {
+    height: 600px; /* Increased height for better visibility */
+    width: 150%; /* Make the map wider but centered */
+    max-width: 5000px; /* Set a max width for the map */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+    .container {
+        width: 100%; /* Full width on smaller screens */
+    }
+    #map {
+        width: 100%; /* Full width map on smaller screens */
+    }
+}
