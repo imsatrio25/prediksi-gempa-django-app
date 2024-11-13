@@ -26,7 +26,7 @@ dotenv.load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['https://prediksigempa.netlify.app']
+ALLOWED_HOSTS = []
 
 
 # Application definition
