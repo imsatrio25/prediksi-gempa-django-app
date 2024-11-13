@@ -5,7 +5,7 @@ import pandas as pd
 from django.http import JsonResponse
 
 # Load the saved model and scalers
-model = joblib.load('backend/models/rfnon.pkl')
+model = joblib.load('backend/models/rfin.pkl')
 def predict_radius(magnitude, depth, phasecount, mmi):
     # Prepare the input data for scaling
     input_data = np.array([[mmi, phasecount, magnitude, depth]])
