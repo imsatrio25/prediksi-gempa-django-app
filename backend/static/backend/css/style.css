@@ -17,10 +17,10 @@ h1 {
 
 
 .navbar {
-    background-color: #f9f9f9;
-    padding: 10px 20px;
+    background-color: #1c1c1c;
+    padding: 20px 50px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
@@ -41,99 +41,69 @@ h1 {
   
   .navbar-link {
     text-decoration: none;
-    color: #02385A;
-    transition: color 0.3s ease;
+    color: #dbdbdb;
+    transition: color 0.3s ease, transform 0.3s ease;
   }
   
   .navbar-link:hover {
-    color: #0275d8;
+    color: #ffffff;
+    transform: scale(1.2);
   }
   
 
-  /* ==================== HOME ==============================*/
-.home-container {
-    display: flex; /* Enables flexbox layout */
-    justify-content: center; /* Spaces out content evenly */
-    align-items: center; /* Vertically aligns items */
-    text-align: left; /* Aligns text to the left */
-    height: 100vh;
+  .home-container, .data-container {
+    display: flex;
+    flex-direction: row; /* Align children side by side */
+    justify-content: space-between; /* Add space between text and image */
+    align-items: center; /* Align items vertically */
+    text-align: left; /* Align text to the left */
+    height: auto; /* Adjust height based on content */
     margin: 0 auto;
-    max-width: 1000px; /* Adjust as needed */
-    gap: 20px; /* Adds spacing between text and image */
+    max-width: 1000px;
+    gap: 20px;
+    padding: 20px;
 }
 
-.home-container h1 {
-    width: 50rem;
-    height: 6rem;
-    text-align: left;
-    font-family: 'Roboto Mono';
-    font-size: 5.25rem;
-    font-weight: 700;
-    color: #000;
-}
-
-.home-container p {
-    font-family: 'Roboto Mono';
-    text-align: justify;
-    font-size: 1.5rem;
-    line-height: 1.6;
-    color: #333;
-    margin: 20px 0;
-}
-
-.home-container img {
-    width: 49.90144rem;
-    height: 43.75rem;
-}
-
-/* ==========================SUMBER DATA====================================== */
-
-.data-container {
-    display: flex; /* Enables flexbox layout */
-    justify-content: center; /* Spaces out content evenly */
-    align-items: center; /* Vertically aligns items */
-    text-align: left; /* Aligns text to the left */
-    height: 100vh;
-    margin: 0 auto;
-    max-width: 1000px; /* Adjust as needed */
-    gap: 60px; /* Adds spacing between text and image */
-}
-
-.data-container h1 {
-    width: 50rem;
-    height: 6rem;
-    text-align: left;
-    font-family: 'Roboto Mono';
-    font-size: 5.25rem;
-    font-weight: 700;
-    color: #000;
-}
-
-.data-container p {
-    font-family: 'Roboto Mono';
-    text-align: justify;
-    font-size: 1.5rem;
-    line-height: 1.6;
-    color: #333;
-    margin: 20px 0;
-}
-
+.home-container img, 
 .data-container img {
-    width: 42.1875rem;
-    height: 31.5625rem;
+    width: 50%; /* Adjust size of the image */
+    height: auto; /* Maintain aspect ratio */
 }
+
+.home-container p, 
+.data-container p {
+    flex: 1; /* Allow text to take up remaining space */
+    font-family: 'Roboto Mono';
+    text-align: justify;
+    font-size: 1.25rem; /* Adjust font size */
+    line-height: 1.6;
+    color: #333;
+    margin: 20px;
+}
+
+
+.home-container h1,
+.data-container h1 {
+    white-space: nowrap; /* Prevent line breaks */
+    font-family: 'Roboto Mono';
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: #000;
+    text-align: left;
+}
+
 
 /* ==========================KOLOM DATA====================================== */
-/* Data Section Styles */
 .data-section {
     text-align: center;
     margin: 50px auto;
     max-width: 1200px;
+    padding: 20px; /* Add padding for smaller screens */
 }
 
 .data-section h1 {
     font-family: 'Roboto Mono', monospace;
-    font-size: 5.25rem;
+    font-size: 4rem;
     font-weight: 700;
     color: #000;
     margin-bottom: 40px;
@@ -142,17 +112,20 @@ h1 {
 /* Container for points */
 .points-container {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
+    justify-content: center;
     gap: 40px;
     text-align: left;
 }
 
 /* Each column */
 .points-column {
-    flex: 1;
+    flex: 1 1 100%; /* Make columns stack on smaller screens */
     display: flex;
     flex-direction: column;
     gap: 20px;
+    max-width: 500px; /* Limit column width */
+    margin: 0 auto;
 }
 
 /* Each point */
@@ -165,12 +138,12 @@ h1 {
 .point .icon {
     font-size: 24px;
     color: #000;
-    margin-top: 4px; /* Align icon with text */
+    margin-top: 4px;
 }
 
 .point .text h3 {
     font-family: 'Roboto Mono', monospace;
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 700;
     margin: 0;
     color: #000;
@@ -178,11 +151,64 @@ h1 {
 
 .point .text p {
     font-family: 'Roboto Mono', monospace;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     color: #333;
     margin: 5px 0 0 0;
     line-height: 1.6;
     text-align: justify;
+}
+
+/* ==================== Responsive Breakpoints ==============================*/
+@media (max-width: 1200px) {
+    .home-container, .data-container {
+        max-width: 90%; /* Reduce max width */
+    }
+}
+
+@media (max-width: 768px) {
+    .home-container, .data-container {
+        flex-direction: column; /* Stack text and image */
+        text-align: center; /* Center text */
+    }
+
+    .home-container img, 
+    .data-container img {
+        width: 80%; /* Reduce image size */
+    }
+
+    .home-container h1, 
+    .data-container h1, 
+    .data-section h1 {
+        font-size: 2.5rem; /* Adjust font size */
+    }
+
+    .home-container p, 
+    .data-container p, 
+    .point .text p {
+        font-size: 1rem; /* Adjust font size */
+    }
+
+    .points-column {
+        max-width: 100%; /* Allow full-width stacking */
+    }
+}
+
+@media (max-width: 480px) {
+    .home-container h1, 
+    .data-container h1, 
+    .data-section h1 {
+        font-size: 2.5rem; /* Further reduce font size */
+    }
+
+    .home-container p, 
+    .data-container p, 
+    .point .text p {
+        font-size: 0.9rem; /* Smaller font for mobile */
+    }
+
+    .points-container {
+        flex-direction: column; /* Stack points */
+    }
 }
 
 .input-forms {
