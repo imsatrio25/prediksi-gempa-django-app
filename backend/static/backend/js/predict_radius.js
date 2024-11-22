@@ -1,38 +1,43 @@
 let map;  // Declare map variable outside the function to prevent re-initialization
 let marker, circle;  // Declare variables to track marker and circle layers
-let processedRows = 0;
+
+$(document).ready(function() {
+    // Auto-scroll to the map when a button is clicked
+    $('#predictRadiusBtn, #uploadPredictBtn').on('click', function() {
+        $('html, body').animate({
+            scrollTop: $('#map').offset().top
+        }, 1000); // Adjust the duration (1000ms = 1s) for smooth scrolling
+    });
+});
 
 // Function to determine circle color based on magnitude
 function getColorByMagnitude(magnitude) {
     if (magnitude >= 7.0) {
-        return 'red';        // Magnitude 7.0–7.9
+        return 'red';
     } else if (magnitude >= 6.1) {
-        return 'orange';     // Magnitude 6.1–6.9
+        return 'orange';
     } else if (magnitude >= 5.5) {
-        return 'yellow';     // Magnitude 5.5–6.0
+        return 'yellow';
     } else {
-        return 'lightyellow'; // Magnitude 2.5–5.4
+        return 'lightyellow';
     }
 }
 
 function predictRadius() {
-    const magnitude = parseFloat(document.getElementById('magnitude').value);
-    const depth = document.getElementById('depth').value;
-    const phasecount = document.getElementById('phasecount').value;
-    const mmi = document.getElementById('mmi').value;
-    const latitude = parseFloat(document.getElementById("latitude").value);
-    const longitude = parseFloat(document.getElementById("longitude").value);
+    const magnitude = parseFloat($('#magnitude').val());
+    const depth = $('#depth').val();
+    const phasecount = $('#phasecount').val();
+    const latitude = parseFloat($('#latitude').val());
+    const longitude = parseFloat($('#longitude').val());
 
-    fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}&mmi=${mmi}`)
+    fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
-                document.getElementById('result').innerText = `Error: ${data.error}`;
+                $('#result').text(`Error: ${data.error}`);
             } else {
                 const radiusKilometers = data.predicted_radius_kilometers;
-
-                document.getElementById('result').innerText = 
-                    `Estimasi radius kerusakan: (${radiusKilometers} km)`;
+                $('#result').text(`Estimasi radius kerusakan: (${radiusKilometers} km)`);
 
                 // Initialize the map if it doesn't exist
                 if (!map) {
@@ -67,7 +72,7 @@ function predictRadius() {
             }
         })
         .catch(error => {
-            document.getElementById('result').innerText = `Error: ${error}`;
+            $('#result').text(`Error: ${error}`);
         });
 }
 
@@ -92,13 +97,12 @@ function uploadCSV() {
         const headers = rows[0].split(',').map(header => header.trim().toLowerCase());
         const magIndex = headers.indexOf('magnitude');
         const depthIndex = headers.indexOf('depth');
-        const mmiIndex = headers.indexOf('mmi');
         const phaIndex = headers.indexOf('phasecount');
         const latIndex = headers.indexOf('latitude');
         const lonIndex = headers.indexOf('longitude');
 
-        if (magIndex === -1 || depthIndex === -1 || latIndex === -1 || lonIndex === -1) {
-            alert("CSV file must contain 'magnitude', 'depth', 'latitude', and 'longitude' columns.");
+        if (magIndex === -1 || depthIndex === -1 || phaIndex === -1 || latIndex === -1 || lonIndex === -1) {
+            alert("CSV file must contain 'magnitude', 'depth', 'phasecount', 'latitude', and 'longitude' columns.");
             return;
         }
 
@@ -119,36 +123,37 @@ function uploadCSV() {
             });
         }
 
+        console.log(`Max Rows to Process: ${maxRows}`); // Check maxRows value
         const predictions = [];
         let processedCount = 0;
 
         rows.slice(1, maxRows + 1).forEach((row, index) => {
+            console.log(`Processing row ${index + 2}: ${row}`); // Log the current row
             const columns = row.split(',');
 
             const magnitude = parseFloat(columns[magIndex].trim());
             const depth = parseFloat(columns[depthIndex].trim());
             const phasecount = parseFloat(columns[phaIndex].trim());
-            const mmi = parseFloat(columns[mmiIndex].trim());
             const latitude = parseFloat(columns[latIndex].trim());
             const longitude = parseFloat(columns[lonIndex].trim());
 
-            if (isNaN(magnitude) || isNaN(depth) || isNaN(latitude) || isNaN(longitude)) {
+            if (isNaN(magnitude) || isNaN(depth) || isNaN(phasecount) || isNaN(latitude) || isNaN(longitude)) {
                 console.warn(`Skipping invalid row ${index + 2}: ${row}`);
                 return;
             }
 
-            fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}&mmi=${mmi}`)
+            fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}`)
                 .then(response => response.json())
                 .then(data => {
+                    console.log(data); // Log the API response
                     if (!data.error) {
                         const radiusKilometers = data.predicted_radius_kilometers;
                         const circleColor = getColorByMagnitude(magnitude);
 
                         const marker = L.marker([latitude, longitude]).addTo(map);
-                        marker.bindPopup(`Latitude: ${latitude}`);
                         marker.bindPopup(
                             `Estimasi radius kerusakan: ${radiusKilometers} km<br>` +
-                            `Latitude: ${latitude}<br>`+
+                            `Latitude: ${latitude}<br>` +
                             `Longitude: ${longitude}`).openPopup();
 
                         const circle = L.circle([latitude, longitude], {

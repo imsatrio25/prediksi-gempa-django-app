@@ -4,11 +4,20 @@ import numpy as np
 import pandas as pd
 from django.http import JsonResponse
 
+
+def home(request):
+    return render(request, 'home.html')
+
+def rad_form(request):
+    return render(request, 'radius_form.html')
+
+
+
 # Load the saved model and scalers
-model = joblib.load('backend/models/rfin.pkl')
-def predict_radius(magnitude, depth, phasecount, mmi):
+model = joblib.load('backend/models/rf_final.pkl')
+def predict_radius(magnitude, depth, phasecount):
     # Prepare the input data for scaling
-    input_data = np.array([[mmi, phasecount, magnitude, depth]])
+    input_data = np.array([[phasecount, magnitude, depth]])
     print(f"Input Data: {input_data}")
 
     
@@ -37,18 +46,16 @@ def radius_prediction(request):
             magnitude = request.GET.get('magnitude')
             depth = request.GET.get('depth')
             phasecount = request.GET.get('phasecount')
-            mmi = request.GET.get('mmi')
             latitude = request.GET.get('latitude')
             longitude = request.GET.get('longitude')
 
             # Check for missing required parameters
-            if not all([magnitude, depth, phasecount, mmi]):
+            if not all([magnitude, depth, phasecount]):
                 return JsonResponse({'error': 'Missing required parameters.'}, status=400)
 
             # Convert parameters to appropriate types
             magnitude = float(magnitude)
             phasecount = float(phasecount)
-            mmi = int(mmi)  # Convert mmi to int
             depth = int(depth)  # Convert depth to int
 
             # Optional parameters
@@ -56,7 +63,7 @@ def radius_prediction(request):
             longitude = float(longitude) if longitude else None
 
             # Predict the radius
-            predicted_radius = predict_radius(magnitude, depth, phasecount, mmi)
+            predicted_radius = predict_radius(magnitude, depth, phasecount)
 
             # Prepare the response
             response_data = {
@@ -73,8 +80,3 @@ def radius_prediction(request):
         except Exception as e:
             # Catch all other exceptions
             return JsonResponse({'error': str(e)}, status=400)
-
-
-
-def home(request):
-    return render(request, 'radius_form.html')

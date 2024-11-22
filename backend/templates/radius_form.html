@@ -1,75 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Earthquake Radius Prediction</title>
-    <link rel="stylesheet" href="{% static 'backend/css/style.css' %}">
-    <script src="{% static 'backend/js/predict_radius.js' %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
-</head>
-<body>
-    <header>
-        <h1>Earthquake Radius Prediction</h1>
-    </header>
-    
-    <main>
-        <div class="container">
-            <section class="form-container">
-                <p class="intro-text">Enter earthquake data to predict the radius or upload a CSV file with multiple data points.</p>
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
 
-                <form id="predictionForm">
+{% block content %}
+
+<header>
+    <h1>Prediksi Estimasi Radius Kerusakan</h1>
+</header>
+<main>
+    <div class="container">
+        <!-- Input Section -->
+        <section class="input-container">
+            <p class="intro-text">Masukkan data gempa atau unggah file CSV untuk memprediksi radius kerusakan</p>
+            <div class="input-forms">
+                <!-- Manual Input Form -->
+                <form id="predictionForm" class="form">
+                    <h3>Input Data Secara Manual</h3>
                     <div class="input-group">
-                        <label for="magnitude">Magnitude:</label>
+                        <label for="magnitude">Magnitude/Magnitudo:</label>
                         <input type="text" id="magnitude" name="magnitude" required placeholder="e.g., 5.6">
                     </div>
-
                     <div class="input-group">
-                        <label for="depth">Depth (km):</label>
-                        <input type="text" id="depth" name="depth" required placeholder="e.g., 10.5">
+                        <label for="depth">Depth/Kedalaman (kilometer):</label>
+                        <input type="text" id="depth" name="depth" required placeholder="e.g., 25">
                     </div>
-
                     <div class="input-group">
                         <label for="phasecount">Phasecount:</label>
                         <input type="text" id="phasecount" name="phasecount" required placeholder="e.g., 10.5">
                     </div>
-
-                    <div class="input-group">
-                        <label for="mmi">MMI:</label>
-                        <input type="text" id="mmi" name="mmi" required placeholder="e.g., 10.5">
-                    </div>
-
                     <div class="input-group">
                         <label for="latitude">Latitude:</label>
                         <input type="number" id="latitude" name="latitude" step="0.0001" required placeholder="e.g., -0.7893">
                     </div>
-
                     <div class="input-group">
                         <label for="longitude">Longitude:</label>
                         <input type="number" id="longitude" name="longitude" step="0.0001" required placeholder="e.g., 108.02">
                     </div>
-
-                    <button type="button" onclick="predictRadius()">Predict Radius</button>
+                    <button type="button" id="predictRadiusBtn" onclick="predictRadius()">Predict Radius</button>
                 </form>
-            </section>
+                <!-- CSV Upload Form -->
+                <form class="form">
+                    <h3>Unggah File CSV</h3>
+                    <div class="input-group">
+                        <input type="file" id="csvFile" accept=".csv">
+                    </div>
+                    <button type="button" id="uploadPredictBtn" onclick="uploadCSV()">Upload and Predict</button>
+                </form>
+            </div>
+        </section>
 
-            <section class="file-upload">
-                <h3>Or Upload a CSV File</h3>
-                <input type="file" id="csvFile" accept=".csv">
-                <button type="button" onclick="uploadCSV()">Upload and Predict</button>
-            </section>
+        <!-- Results Section -->
+        <section class="results">
+            <h2>Hasil Prediksi</h2>
+            <p id="result"></p>
+        </section>
 
-            <section class="results">
-                <h2>Prediction Results:</h2>
-                <p id="result"></p>
-            </section>
+        <!-- Map Section -->
+        <section class="map-container">
+            <h2>Visualisasi Lokasi dan Radius Kerusakannya</h2>
+            <div id="map"></div>
+        </section>
+    </div>
+</main>
 
-            <section class="map-container">
-                <div id="map"></div>
-            </section>
-        </div>
-    </main>
-</body>
-</html>
+{% endblock %}

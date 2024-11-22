@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<section class="home-section">
+    <div class="home-container">
+        <div class="text-content">
+            <h1>Selamat Datang,</h1>
+            <p>
+                Aplikasi pendeteksi radius gempa bertujuan memberikan informasi cepat dan 
+                akurat mengenai radius dan dampak sebuah gempa, untuk meningkatkan kesiapsiagaan 
+                dan penanggulangan bencana.
+            </p>
+        </div>
+        <img src="{% static 'backend/images/gemparum.png' %}" alt="Earthquake Illustration">
+    </div>
+</section>
+<section class="sumber-data">
+    <div class="data-container">
+        <img src="{% static 'backend/images/dataset.svg' %}" alt="Earthquake Illustration">
+        <div class="text-content-data">
+            <h1>Sumber Data</h1>
+            <p>
+                Data untuk pelatihan model diambil dari Repositori Gempa yang 
+                dikelola oleh BMKG (Badan Meteorologi, Klimatologi, dan Geofisika).
+                <br>
+                Sumber data Ini berisi kejadian gempa bumi dari 1 November 2008 hingga 22 Agustus 2024.  
+                Ada 37 variabel dalam kumpulan data ini, masing-masing dengan nama deskriptif.
+            </p>
+        </div>
+    </div>
+</section>
+<section class="data-section">
+    <h1>Kolom Data:</h1>
+    <div class="points-container">
+        <!-- Left column -->
+        <div class="points-column">
+            <div class="point">
+                <span class="icon">●</span>
+                <div class="text">
+                    <h3>Latitude</h3>
+                    <p>Posisi utara-selatan pusat gempa (°); positif untuk lintang utara, negatif untuk lintang selatan.</p>
+                </div>
+            </div>
+            <div class="point">
+                <span class="icon">●</span>
+                <div class="text">
+                    <h3>Longitude</h3>
+                    <p>Posisi timur-barat pusat gempa (°); positif untuk bujur timur, negatif untuk bujur barat.</p>
+                </div>
+            </div>
+            <div class="point">
+                <span class="icon">●</span>
+                <div class="text">
+                    <h3>MMI</h3>
+                    <p>Skala intensitas gempa (I-XII), menunjukkan dampak pada bangunan, tanah, dan manusia.</p>
+                </div>
+            </div>
+        </div>
+        <!-- Right column -->
+        <div class="points-column">
+            <div class="point">
+                <span class="icon">●</span>
+                <div class="text">
+                    <h3>Magnitude</h3>
+                    <p>Ukuran energi gempa, biasanya dalam skala Richter atau Mw; semakin besar, semakin kuat gempa.</p>
+                </div>
+            </div>
+            <div class="point">
+                <span class="icon">●</span>
+                <div class="text">
+                    <h3>Depth/Kedalaman</h3>
+                    <p>Kedalaman pusat gempa (km); dangkal (&lt;70 km) atau dalam (hingga ratusan km).</p>
+                </div>
+            </div>
+            <div class="point">
+                <span class="icon">●</span>
+                <div class="text">
+                    <h3>Phasecount</h3>
+                    <p>Jumlah fase gelombang seismik terdeteksi, menggambarkan kompleksitas data gempa.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}
