@@ -26,7 +26,7 @@ dotenv.load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = ['.railway.app', 'https://web-production-3e1d.up.railway.app', 'localhost']
+ALLOWED_HOSTS = ['.railway.app', 'https://prediragem.up.railway.app', 'localhost']
 # ALLOWED_HOSTS = []
 
 

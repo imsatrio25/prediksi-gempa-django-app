@@ -28,12 +28,10 @@
                         <input type="text" id="phasecount" name="phasecount" required placeholder="e.g., 10.5">
                     </div>
                     <div class="input-group">
-                        <label for="latitude">Latitude:</label>
-                        <input type="number" id="latitude" name="latitude" step="0.0001" required placeholder="e.g., -0.7893">
-                    </div>
-                    <div class="input-group">
-                        <label for="longitude">Longitude:</label>
-                        <input type="number" id="longitude" name="longitude" step="0.0001" required placeholder="e.g., 108.02">
+                        <label for="districtDropdown">District</label>
+                        <select id="districtDropdown" name="district">
+                            <option value="">Select District</option>
+                        </select>
                     </div>
                     <button type="button" id="predictRadiusBtn" onclick="predictRadius()">Predict Radius</button>
                 </form>

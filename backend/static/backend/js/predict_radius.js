@@ -8,7 +8,37 @@ $(document).ready(function() {
             scrollTop: $('#map').offset().top
         }, 1000); // Adjust the duration (1000ms = 1s) for smooth scrolling
     });
+
+    // Fetch districts and populate dropdown
+    populateDistrictDropdown(); // Call the function to populate dropdown
 });
+
+// Function to populate district dropdown dynamically
+function populateDistrictDropdown() {
+    const dropdown = $('#districtDropdown'); // Adjust the selector to match your HTML
+    fetch('/get-districts/')  // Endpoint to fetch district data
+        .then(response => response.json())
+        .then(data => {
+            if (data.districts && Array.isArray(data.districts)) {
+                // Clear existing options
+                dropdown.empty();
+                dropdown.append(new Option('Select District', ''));
+
+                // Populate dropdown with district names, and store lat/lon as JSON string in value
+                data.districts.forEach(district => {
+                    const districtData = JSON.stringify({
+                        name: district.name,
+                        lat: district.latitude,
+                        lon: district.longitude
+                    });
+                    dropdown.append(new Option(district.name, districtData));
+                });
+            } else {
+                console.error('Invalid district data:', data);
+            }
+        })
+        .catch(error => console.error('Error fetching districts:', error));
+}
 
 // Function to determine circle color based on magnitude
 function getColorByMagnitude(magnitude) {
@@ -27,8 +57,10 @@ function predictRadius() {
     const magnitude = parseFloat($('#magnitude').val());
     const depth = $('#depth').val();
     const phasecount = $('#phasecount').val();
-    const latitude = parseFloat($('#latitude').val());
-    const longitude = parseFloat($('#longitude').val());
+    const selectedDistrict = JSON.parse($('#districtDropdown').val());  // Parse the stored JSON string
+    const districtName = selectedDistrict.name;
+    const latitude = selectedDistrict.lat;
+    const longitude = selectedDistrict.lon;
 
     fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}`)
         .then(response => response.json())
@@ -39,7 +71,7 @@ function predictRadius() {
                 const radiusKilometers = data.predicted_radius_kilometers;
                 $('#result').text(`Estimasi radius kerusakan: (${radiusKilometers} km)`);
 
-                // Initialize the map if it doesn't exist
+                // Initialize map if it doesn't exist
                 if (!map) {
                     map = L.map('map').setView([latitude, longitude], 7);
                     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -54,15 +86,15 @@ function predictRadius() {
                 if (marker) map.removeLayer(marker);
                 if (circle) map.removeLayer(circle);
 
-                // Get color based on magnitude
+                // Add color based on magnitude
                 const circleColor = getColorByMagnitude(magnitude);
 
-                // Add new marker and circle with color based on magnitude
+                // Add new marker and circle with the calculated radius
                 marker = L.marker([latitude, longitude]).addTo(map);
                 marker.bindPopup(
-                    `Estimasi radius kerusakan: ${radiusKilometers} km<br>` +
-                    `Latitude: ${latitude}<br>` +
-                    `Longitude: ${longitude}`).openPopup();
+                    `Kecamatan: ${districtName}<br>` +
+                    `Estimasi radius kerusakan: ${radiusKilometers} km`
+                    ).openPopup();
 
                 circle = L.circle([latitude, longitude], {
                     color: circleColor,
@@ -75,6 +107,8 @@ function predictRadius() {
             $('#result').text(`Error: ${error}`);
         });
 }
+
+
 
 function uploadCSV() {
     const fileInput = document.getElementById('csvFile');
