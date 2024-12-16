@@ -30,10 +30,10 @@ def get_districts(request):
 
 
 # Load the saved model
-model = joblib.load('backend/models/rf_final.pkl')
+model = joblib.load('backend/models/rf_final2.pkl')
 
-def predict_radius(magnitude, depth, phasecount):
-    input_data = np.array([[phasecount, magnitude, depth]])
+def predict_radius(magnitude, depth):
+    input_data = np.array([[magnitude, depth]])
     original_radius = model.predict(input_data)[0]
 
     if np.isnan(original_radius):
@@ -47,16 +47,14 @@ def radius_prediction(request):
             # Fetch parameters
             magnitude = request.GET.get('magnitude')
             depth = request.GET.get('depth')
-            phasecount = request.GET.get('phasecount')
             district_name = request.GET.get('district_name')
 
             # Check for missing required parameters
-            if not all([magnitude, depth, phasecount]):
+            if not all([magnitude, depth]):
                 return JsonResponse({'error': 'Missing required parameters.'}, status=400)
 
             # Convert parameters to appropriate types
             magnitude = float(magnitude)
-            phasecount = float(phasecount)
             depth = int(depth)  # Convert depth to int
 
             # Look up district data from the database
@@ -72,7 +70,7 @@ def radius_prediction(request):
                 longitude = None
 
             # Predict the radius
-            predicted_radius = predict_radius(magnitude, depth, phasecount)
+            predicted_radius = predict_radius(magnitude, depth)
 
             # Prepare the response
             response_data = {

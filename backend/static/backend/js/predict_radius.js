@@ -56,13 +56,12 @@ function getColorByMagnitude(magnitude) {
 function predictRadius() {
     const magnitude = parseFloat($('#magnitude').val());
     const depth = $('#depth').val();
-    const phasecount = $('#phasecount').val();
     const selectedDistrict = JSON.parse($('#districtDropdown').val());  // Parse the stored JSON string
     const districtName = selectedDistrict.name;
     const latitude = selectedDistrict.lat;
     const longitude = selectedDistrict.lon;
 
-    fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}`)
+    fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}`)
         .then(response => response.json())
         .then(data => {
             if (data.error) {
@@ -131,12 +130,11 @@ function uploadCSV() {
         const headers = rows[0].split(',').map(header => header.trim().toLowerCase());
         const magIndex = headers.indexOf('magnitude');
         const depthIndex = headers.indexOf('depth');
-        const phaIndex = headers.indexOf('phasecount');
         const latIndex = headers.indexOf('latitude');
         const lonIndex = headers.indexOf('longitude');
 
-        if (magIndex === -1 || depthIndex === -1 || phaIndex === -1 || latIndex === -1 || lonIndex === -1) {
-            alert("CSV file must contain 'magnitude', 'depth', 'phasecount', 'latitude', and 'longitude' columns.");
+        if (magIndex === -1 || depthIndex === -1 || latIndex === -1 || lonIndex === -1) {
+            alert("CSV file must contain 'magnitude', 'depth', 'latitude', and 'longitude' columns.");
             return;
         }
 
@@ -167,16 +165,15 @@ function uploadCSV() {
 
             const magnitude = parseFloat(columns[magIndex].trim());
             const depth = parseFloat(columns[depthIndex].trim());
-            const phasecount = parseFloat(columns[phaIndex].trim());
             const latitude = parseFloat(columns[latIndex].trim());
             const longitude = parseFloat(columns[lonIndex].trim());
 
-            if (isNaN(magnitude) || isNaN(depth) || isNaN(phasecount) || isNaN(latitude) || isNaN(longitude)) {
+            if (isNaN(magnitude) || isNaN(depth) || isNaN(latitude) || isNaN(longitude)) {
                 console.warn(`Skipping invalid row ${index + 2}: ${row}`);
                 return;
             }
 
-            fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}&phasecount=${phasecount}`)
+            fetch(`/api/predict-radius/?magnitude=${magnitude}&depth=${depth}&latitude=${latitude}&longitude=${longitude}`)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data); // Log the API response
